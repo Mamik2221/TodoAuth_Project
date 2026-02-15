@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required
 
 from forms import RegisterForm, LoginForm
-from models import db, User
+from models import db, User, Tasks
 
 routes = Blueprint("routes", __name__)
 
@@ -36,4 +36,6 @@ def login():
 @routes.route("/profile")
 @login_required
 def profile():
-    return "<p>Hello world</p>"
+    tasks = Tasks.query.all()
+    render_template("profile.html", tasks=tasks)
+
