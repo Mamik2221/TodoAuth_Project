@@ -37,5 +37,17 @@ def login():
 @login_required
 def profile():
     tasks = Tasks.query.all()
-    render_template("profile.html", tasks=tasks)
+    return render_template("profile.html", tasks=tasks)
+
+@routes.route("/add", methods=["GET", "POST"])
+@login_required
+def add_tasks():
+    if request.method == "POST":
+        title = request.form["title"]
+        description = request.form["description"]
+        new_tasks = Tasks(title=title, description=description)
+        db.session.add(new_tasks)
+        db.session.commit()
+        return redirect(url_for("routes.profile"))
+    return render_template("add_task.html")
 

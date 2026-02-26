@@ -1,2 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
 <h1>Все задачи</h1>
+<table border="1">
+    {% for task in tasks %}
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>{{ task.title }}</td>
+        <td>{{ task.description }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+
+
 

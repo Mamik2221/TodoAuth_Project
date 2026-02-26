@@ -2,6 +2,7 @@ from flask import Flask
 from models import db, User
 from routes import init_routes
 from flask_login import LoginManager
+
 app = Flask(__name__)
 app.config.from_object("config")
 
