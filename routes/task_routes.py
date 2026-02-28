@@ -1,7 +1,7 @@
 from flask import render_template, abort, url_for, redirect, flash, Blueprint, request
 from sqlalchemy.sql.functions import user
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, login_required
+from flask_login import login_user, login_required, current_user
 
 from forms import RegisterForm, LoginForm
 from models import db, User, Tasks
@@ -36,7 +36,7 @@ def login():
 @routes.route("/profile")
 @login_required
 def profile():
-    tasks = Tasks.query.all()
+    tasks = Tasks.query.filter_by(user_id=current_user.id).all()
     return render_template("profile.html", tasks=tasks)
 
 @routes.route("/add", methods=["GET", "POST"])
@@ -45,7 +45,7 @@ def add_tasks():
     if request.method == "POST":
         title = request.form["title"]
         description = request.form["description"]
-        new_tasks = Tasks(title=title, description=description)
+        new_tasks = Tasks(title=title, description=description, user=current_user)
         db.session.add(new_tasks)
         db.session.commit()
         return redirect(url_for("routes.profile"))
